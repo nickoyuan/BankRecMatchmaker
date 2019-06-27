@@ -1,13 +1,13 @@
 package com.xero.interview.bankrecmatchmaker
 
-interface MatchRepository {
+interface MatchAndTransactionRepository {
     fun getMatchCountAndTotal() : Pair<Int, Float>
 
     fun getMatchCount() : Int
     fun setMatchCount(count: Int)
 
-    fun setMatchTotal() : Float
-    fun getMatchTotal(amount : Float)
+    fun getTransactionTotal() : Float
+    fun setTransactionTotal(transactionAmount : Float)
 
     fun clear()
 }
