@@ -56,4 +56,19 @@ class MatchViewModel : ViewModel() {
         viewState.value = MatchItemUIModel.TransactionAmountUpdated(count)
         viewState.value = MatchItemUIModel.MatchCountUpdated(title)
     }
+
+    fun findSubsetOfTransactionSum(list : List<MatchItem>) : MutableList<Int>? {
+        val transactionTotal : Int = ((repository.getTransactionTotal() * 100).toInt())
+        val transactionList : MutableList<Int> = ArrayList()
+        for(transactions in list) {
+            transactionList.add((transactions.getTotal() * 100).toInt())
+        }
+
+         SubsetSumFinder().getAllSubsets(
+                transactionList,
+                transactionList.size,
+                transactionTotal
+        )
+        return null
+    }
 }

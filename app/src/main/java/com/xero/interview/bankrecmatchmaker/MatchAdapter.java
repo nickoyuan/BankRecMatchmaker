@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
         private TextView total;
         private TextView subtextLeft;
         private TextView subtextRight;
+        private Button autoAdd;
 
         // matchItems are items in the list
         private List<MatchItem> matchItems;
@@ -31,10 +33,24 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
             total = itemView.findViewById(R.id.text_total);
             subtextLeft = itemView.findViewById(R.id.text_sub_left);
             subtextRight = itemView.findViewById(R.id.text_sub_right);
+            autoAdd = itemView.findViewById(R.id.btnAutoAdd);
             this.matchItems =  matchItems;
             this.viewModel = viewModel;
             itemView.setOnClickListener(this);
+            autoAdd.setOnClickListener(autoAdd());
         }
+
+        public View.OnClickListener autoAdd () {
+            return new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    viewModel.findSubsetOfTransactionSum(
+                        matchItems
+                    );
+                }
+            };
+        }
+
 
         public void bind(MatchItem matchItem) {
             mainText.setText(matchItem.getPaidTo());

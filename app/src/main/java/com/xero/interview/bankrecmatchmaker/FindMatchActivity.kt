@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
+import android.widget.Button
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_find_match.*
 import java.util.ArrayList
@@ -22,6 +23,7 @@ class FindMatchActivity : AppCompatActivity() {
         val matchText = findViewById<TextView>(R.id.match_count)
         val transactionTotalText = findViewById<TextView>(R.id.transactionAmount)
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
+        val autoAdd = findViewById<Button>(R.id.btnAutoAdd)
 
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -45,6 +47,10 @@ class FindMatchActivity : AppCompatActivity() {
 
         val adapter = MatchAdapter(items, viewModel)
         recyclerView.adapter = adapter
+
+      /*  autoAdd.setOnClickListener {
+            viewModel.findSubsetOfTransactionSum(buildMockData())
+        }*/
     }
 
 
