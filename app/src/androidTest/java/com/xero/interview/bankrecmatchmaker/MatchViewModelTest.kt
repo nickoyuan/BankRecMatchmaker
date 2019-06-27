@@ -14,20 +14,20 @@ class MatchViewModelTest {
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private val viewStateObserver: Observer<MatchItemUIModel> = mock()
-    private val mockVictoryRepository: MatchAndTransactionRepository = mock()
+    private val mockMatchAndTransactionRepository: MatchAndTransactionRepository = mock()
     private val viewModel = MatchViewModel()
 
     @Before
     fun setUpTaskDetailViewModel() {
         viewModel.viewState.observeForever(viewStateObserver)
-        viewModel.repository = mockVictoryRepository
+        viewModel.repository = mockMatchAndTransactionRepository
     }
 
     @Test
     fun initializeReturnsMatchAndTransaction() {
         val transactionAmount = 700f
         val matchAmount = 5000
-        stubVictoryRepositoryGetVictoryTitleAndCount(Pair(matchAmount, transactionAmount))
+        mockMatchRepositoryAmount(Pair(matchAmount, transactionAmount))
         viewModel.initialize()
         verify(viewStateObserver).onChanged(
                 MatchItemUIModel.MatchCountUpdated(matchAmount)
@@ -38,7 +38,7 @@ class MatchViewModelTest {
     }
 
     @Test
-    fun incrementMatchReturnsUpatedCount() {
+    fun incrementMatchReturnsUpdatedCount() {
         val previousCount = 1000
         stubMatchRepositoryGetMatch(previousCount)
         viewModel.incrementMatchCount()
@@ -49,7 +49,18 @@ class MatchViewModelTest {
     }
 
     @Test
-    fun incrementTransactionReturnsUpatedAmount() {
+    fun decrementMatchReturnsUpdatedCount() {
+        val previousMatch= 1000
+        stubMatchRepositoryGetMatch(previousMatch)
+        viewModel.decrementMatchCount()
+
+        verify(viewStateObserver).onChanged(
+                MatchItemUIModel.MatchCountUpdated(previousMatch - 1)
+        )
+    }
+
+    @Test
+    fun incrementTransactionReturnsUpdatedAmount() {
         val previousAmount = 500f
         val amountToAdd = 10.0f
         stubMatchRepositoryGetTransaction(previousAmount)
@@ -63,7 +74,7 @@ class MatchViewModelTest {
     }
 
     @Test
-    fun decrementTransactionReturnsUpatedAmount() {
+    fun decrementTransactionReturnsUpdatedAmount() {
         val previousAmount = 500f
         val amountToSubtract = 10.0f
         stubMatchRepositoryGetTransaction(previousAmount)
@@ -76,20 +87,44 @@ class MatchViewModelTest {
         )
     }
 
-    private fun stubVictoryRepositoryGetVictoryTitleAndCount(TransactionAndMatch: Pair<Int, Float>) {
+    @Test
+    fun resetReturnsMatchAmount() {
+        val transactionAmount = 700f
+        val matchAmount = 5000
+        mockMatchRepositoryAmount(Pair(matchAmount, transactionAmount))
+        viewModel.reset()
+
+        verify(viewStateObserver).onChanged(MatchItemUIModel.MatchCountUpdated(
+                matchAmount
+        ))
+    }
+
+    @Test
+    fun resetReturnsTransactionAmount() {
+        val transactionAmount = 700f
+        val matchAmount = 5000
+        mockMatchRepositoryAmount(Pair(matchAmount, transactionAmount))
+        viewModel.reset()
+
+        verify(viewStateObserver).onChanged(MatchItemUIModel.TransactionAmountUpdated(
+                transactionAmount
+        ))
+    }
+
+    private fun mockMatchRepositoryAmount(TransactionAndMatch: Pair<Int, Float>) {
         stubMatchRepositoryGetMatch(TransactionAndMatch.first)
         stubMatchRepositoryGetTransaction(TransactionAndMatch.second)
-        whenever(mockVictoryRepository.getMatchCountAndTotal())
+        whenever(mockMatchAndTransactionRepository.getMatchCountAndTotal())
                 .thenReturn(TransactionAndMatch)
     }
 
     private fun stubMatchRepositoryGetTransaction(transaction: Float) {
-        whenever(mockVictoryRepository.getTransactionTotal())
+        whenever(mockMatchAndTransactionRepository.getTransactionTotal())
                 .thenReturn(transaction)
     }
 
     private fun stubMatchRepositoryGetMatch(match: Int) {
-        whenever(mockVictoryRepository.getMatchCount())
+        whenever(mockMatchAndTransactionRepository.getMatchCount())
                 .thenReturn(match)
     }
 

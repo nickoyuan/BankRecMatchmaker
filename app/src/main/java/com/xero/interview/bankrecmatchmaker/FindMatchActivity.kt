@@ -12,12 +12,14 @@ import java.util.ArrayList
 
 class FindMatchActivity : AppCompatActivity() {
 
+    private lateinit var viewModel: MatchViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_find_match)
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        val matchText = findViewById<TextView>(R.id.match_text)
+        val matchText = findViewById<TextView>(R.id.match_count)
         val transactionTotalText = findViewById<TextView>(R.id.transactionAmount)
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
 
@@ -25,43 +27,33 @@ class FindMatchActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setTitle(R.string.title_find_match)
 
-
-        val target = intent.getFloatExtra(TARGET_MATCH_VALUE, 10000f)
-        matchText.text = getString(R.string.select_matches, target.toInt())
-
-        val transactionAmount = intent.getFloatExtra(TARGET_MATCH_VALUE, 1000.50f)
-        transactionTotalText.text = getString(R.string.total_amount, transactionAmount)
-
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(this)
         val items = buildMockData()
-        val adapter = MatchAdapter(items)
 
-        recyclerView.adapter = adapter
-
-        val viewModel = ViewModelProviders.of(this).get(MatchViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(MatchViewModel::class.java)
         viewModel.viewState.observe(this, android.arch.lifecycle.Observer {
             it -> it?.let { render(it) }
 
         })
         viewModel.repository = Repository(this)
         viewModel.initialize()
+
+        matchText.text = viewModel.repository.getMatchCount().toString()
+        transactionTotalText.text = viewModel.repository.getTransactionTotal().toString()
+
+        val adapter = MatchAdapter(items, viewModel)
+        recyclerView.adapter = adapter
     }
 
 
     private fun render(uiModel: MatchItemUIModel) {
         when (uiModel) {
             is MatchItemUIModel.TransactionAmountUpdated -> {
-                transactionAmount.text = getString(
-                        R.string.select_matches,
-                        uiModel.amount
-                )
+                transactionAmount.text = uiModel.amount.toString()
             }
             is MatchItemUIModel.MatchCountUpdated -> {
-                match_text.text = getString(
-                        R.string.total_amount,
-                        uiModel.matchCount
-                )
+                match_count.text = uiModel.matchCount.toString()
             }
         }
     }

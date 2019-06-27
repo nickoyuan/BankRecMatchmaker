@@ -25,7 +25,7 @@ class Repository(context : Context) : MatchAndTransactionRepository{
     }
 
     override fun getTransactionTotal(): Float {
-        return sharedPreferences.getFloat(KEY_TRANSACTION_COUNT, 0f)
+        return sharedPreferences.getFloat(KEY_TRANSACTION_COUNT, 2000f)
     }
 
     override fun setTransactionTotal(transactionAmount: Float) {

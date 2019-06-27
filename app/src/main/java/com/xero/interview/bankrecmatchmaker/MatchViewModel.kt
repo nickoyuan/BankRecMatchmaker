@@ -50,6 +50,10 @@ class MatchViewModel : ViewModel() {
     }
     
     fun reset() {
-        // TODO reset existing victory title and count
+        repository.clear()
+
+        val (title, count) = repository.getMatchCountAndTotal()
+        viewState.value = MatchItemUIModel.TransactionAmountUpdated(count)
+        viewState.value = MatchItemUIModel.MatchCountUpdated(title)
     }
 }
