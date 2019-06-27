@@ -9,7 +9,6 @@ import org.junit.Test
 
 class MatchViewModelTest {
 
-
     @Rule
     @JvmField
     var instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -25,13 +24,55 @@ class MatchViewModelTest {
     }
 
     @Test
-    fun initializeReturnsTitle() {
+    fun initializeReturnsMatchAndTransaction() {
         val transactionAmount = 700f
         val matchAmount = 5000
         stubVictoryRepositoryGetVictoryTitleAndCount(Pair(matchAmount, transactionAmount))
         viewModel.initialize()
         verify(viewStateObserver).onChanged(
                 MatchItemUIModel.MatchCountUpdated(matchAmount)
+        )
+        verify(viewStateObserver).onChanged(
+                MatchItemUIModel.TransactionAmountUpdated(transactionAmount)
+        )
+    }
+
+    @Test
+    fun incrementMatchReturnsUpatedCount() {
+        val previousCount = 1000
+        stubMatchRepositoryGetMatch(previousCount)
+        viewModel.incrementMatchCount()
+
+        verify(viewStateObserver).onChanged(
+                MatchItemUIModel.MatchCountUpdated(previousCount + 1)
+        )
+    }
+
+    @Test
+    fun incrementTransactionReturnsUpatedAmount() {
+        val previousAmount = 500f
+        val amountToAdd = 10.0f
+        stubMatchRepositoryGetTransaction(previousAmount)
+        viewModel.addToTransactionAmount(amountToAdd)
+
+        verify(viewStateObserver).onChanged(
+                MatchItemUIModel.TransactionAmountUpdated(
+                        previousAmount + amountToAdd
+                )
+        )
+    }
+
+    @Test
+    fun decrementTransactionReturnsUpatedAmount() {
+        val previousAmount = 500f
+        val amountToSubtract = 10.0f
+        stubMatchRepositoryGetTransaction(previousAmount)
+        viewModel.subtractFromTransactionAmount(amountToSubtract)
+
+        verify(viewStateObserver).onChanged(
+                MatchItemUIModel.TransactionAmountUpdated(
+                        previousAmount - amountToSubtract
+                )
         )
     }
 
