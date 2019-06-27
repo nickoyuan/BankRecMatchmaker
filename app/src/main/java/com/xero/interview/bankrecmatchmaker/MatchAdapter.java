@@ -36,6 +36,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
             itemView.setOnClickListener(this);
         }
 
+
         public void bind(MatchItem matchItem) {
             mainText.setText(matchItem.getPaidTo());
             total.setText(Float.toString(matchItem.getTotal()));
@@ -54,16 +55,24 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
 
         public void updateMatchAndTransaction(boolean isChecked, int adapterPosition) {
             if(isChecked) {
-                viewModel.decrementMatchCount();
-                viewModel.subtractFromTransactionAmount(
-                    matchItems.get(adapterPosition).getTotal()
-                );
+                transactionIsSelected(adapterPosition);
             } else {
-                viewModel.incrementMatchCount();
-                viewModel.addToTransactionAmount(
-                    matchItems.get(adapterPosition).getTotal()
-                );
+                transactionIsNotSelected(adapterPosition);
             }
+        }
+
+        private void transactionIsNotSelected(int adapterPosition) {
+            viewModel.incrementMatchCount();
+            viewModel.addToTransactionAmount(
+                matchItems.get(adapterPosition).getTotal()
+            );
+        }
+
+        private void transactionIsSelected(int adapterPosition) {
+            viewModel.decrementMatchCount();
+            viewModel.subtractFromTransactionAmount(
+                matchItems.get(adapterPosition).getTotal()
+            );
         }
 
         public Boolean isCheckedState(CheckedListItem checkedListItem) {

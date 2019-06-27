@@ -6,8 +6,12 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
+import android.util.Log
+import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_find_match.*
+import java.lang.NullPointerException
 import java.util.ArrayList
 
 class FindMatchActivity : AppCompatActivity() {
@@ -22,6 +26,7 @@ class FindMatchActivity : AppCompatActivity() {
         val matchText = findViewById<TextView>(R.id.match_count)
         val transactionTotalText = findViewById<TextView>(R.id.transactionAmount)
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
+        val autoAdd = findViewById<Button>(R.id.btnAutoAdd)
 
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -45,8 +50,32 @@ class FindMatchActivity : AppCompatActivity() {
 
         val adapter = MatchAdapter(items, viewModel)
         recyclerView.adapter = adapter
+
+       autoAdd.setOnClickListener {
+            var subSetPositions = viewModel.findSubsetOfTransactionSum(buildMockData())
+           if(subSetPositions != null && subSetPositions.size > 0) {
+               for(position in subSetPositions) {
+                   selectTransactionAtPosition(recyclerView, position)
+               }
+           } else {
+               Toast.makeText(
+                       this,
+                       "No Matches Found",
+                       Toast.LENGTH_SHORT
+               ).show()
+           }
+        }
     }
 
+    private fun selectTransactionAtPosition(recyclerView : RecyclerView, position : Int) {
+        try {
+            recyclerView.findViewHolderForAdapterPosition(
+                    position
+            ).itemView.performClick()
+        } catch (e : NullPointerException) {
+            Log.w("XeroBank", "recyclerView position not found " + e);
+        }
+    }
 
     private fun render(uiModel: MatchItemUIModel) {
         when (uiModel) {
