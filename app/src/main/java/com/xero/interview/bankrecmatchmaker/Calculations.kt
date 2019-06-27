@@ -7,6 +7,6 @@ interface Calculations {
             transactionArray : List<Int>,
             arrayLength : Int,
             transactionSumToFind : Int
-    )
-    fun display(subsets : ArrayList<Int>): ArrayList<Int>
+    ): ArrayList<Int>?
+
 }

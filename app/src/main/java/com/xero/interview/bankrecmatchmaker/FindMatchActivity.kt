@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_find_match.*
 import java.util.ArrayList
 
@@ -48,9 +49,22 @@ class FindMatchActivity : AppCompatActivity() {
         val adapter = MatchAdapter(items, viewModel)
         recyclerView.adapter = adapter
 
-      /*  autoAdd.setOnClickListener {
-            viewModel.findSubsetOfTransactionSum(buildMockData())
-        }*/
+       autoAdd.setOnClickListener {
+            var subSetPositions = viewModel.findSubsetOfTransactionSum(buildMockData())
+           if(subSetPositions != null) {
+               for(item in subSetPositions) {
+                   recyclerView.findViewHolderForAdapterPosition(
+                           item
+                   ).itemView.performClick()
+               }
+           } else {
+               Toast.makeText(
+                       this,
+                       "No Matches Found",
+                       Toast.LENGTH_SHORT
+               ).show()
+           }
+        }
     }
 
 

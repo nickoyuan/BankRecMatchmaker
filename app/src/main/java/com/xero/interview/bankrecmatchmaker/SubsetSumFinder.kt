@@ -12,10 +12,10 @@ class SubsetSumFinder: Calculations {
             transactionArray : List<Int>,
             arrayLength : Int,
             transactionSumToFind : Int
-    ) {
+    ): ArrayList<Int> ? {
 
         if (arrayLength == 0 || transactionSumToFind < 0)
-                return
+                return null
 
         // Sum 0 can always be achieved with 0 elements
         dp = Array(arrayLength) {
@@ -46,7 +46,7 @@ class SubsetSumFinder: Calculations {
         if (dp[arrayLength - 1][transactionSumToFind] == false) {
             println("There are no subsets with" +
                     " sum " + transactionSumToFind)
-            return
+            return null
         }
 
         // Now recursively traverse dp[][] to find all
@@ -65,23 +65,18 @@ class SubsetSumFinder: Calculations {
             arrayLength : Int,
             transactionSumToFind : Int,
             arrayList : ArrayList<Int>
-    )
-    {
+    ): ArrayList<Int>? {
         // If we reached end and sum is non-zero. We print
         // p[] only if arr[0] is equal to sun OR dp[0][sum]
         // is true.
         if (arrayLength == 0 && transactionSumToFind != 0 && dp[0][transactionSumToFind]) {
             arrayList.add(transactionArray[arrayLength])
-            display(arrayList)
-            arrayList.clear()
-            return
+            return arrayList
         }
 
         // If sum becomes 0
         if (arrayLength == 0 && transactionSumToFind == 0) {
-            display(arrayList)
-            arrayList.clear()
-            return
+            return arrayList
         }
 
         // If given sum can be achieved after ignoring
@@ -90,7 +85,7 @@ class SubsetSumFinder: Calculations {
             // Create a new vector to store path
             val createSeparateArray = ArrayList<Int>()
             createSeparateArray.addAll(arrayList)
-            printSubsetsRec(
+            return printSubsetsRec(
                     transactionArray,
                     arrayLength - 1,
                     transactionSumToFind,
@@ -104,18 +99,13 @@ class SubsetSumFinder: Calculations {
                 && dp[arrayLength- 1][(transactionSumToFind - transactionArray[arrayLength])]
         ) {
             arrayList.add(transactionArray[arrayLength])
-            printSubsetsRec(
+            return printSubsetsRec(
                     transactionArray,
                     arrayLength - 1,
                     transactionSumToFind - transactionArray[arrayLength],
                     arrayList
             )
         }
+        return null
     }
-
-    override fun display(subsets : ArrayList<Int>): ArrayList<Int> {
-         return subsets
-    }
-
-
 }
