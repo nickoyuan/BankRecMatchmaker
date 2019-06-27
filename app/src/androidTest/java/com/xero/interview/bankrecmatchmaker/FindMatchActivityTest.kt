@@ -178,4 +178,28 @@ class FindMatchActivityTest {
                 .check(matches(isDisplayed()))
     }
 
+    @Test
+    fun autoAddWillFindSubSetsFromList() {
+        onView(withId(R.id.btnAutoAdd))
+                .perform(click())
+
+        onView(withRecyclerView(R.id.recycler_view).atPosition(0))
+                .check(
+                        matches(isChecked())
+                )
+
+        onView(withRecyclerView(R.id.recycler_view).atPosition(1))
+                .check(
+                        matches(isChecked())
+                )
+
+        onView(withRecyclerView(R.id.recycler_view).atPosition(5))
+                .check(
+                        matches(isChecked())
+                )
+
+        onView(CoreMatchers.allOf(withId(R.id.transactionAmount), withText((0.0).toString())))
+                .check(matches(isDisplayed()))
+    }
+
 }

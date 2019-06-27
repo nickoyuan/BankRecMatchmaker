@@ -6,10 +6,12 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_find_match.*
+import java.lang.NullPointerException
 import java.util.ArrayList
 
 class FindMatchActivity : AppCompatActivity() {
@@ -51,11 +53,9 @@ class FindMatchActivity : AppCompatActivity() {
 
        autoAdd.setOnClickListener {
             var subSetPositions = viewModel.findSubsetOfTransactionSum(buildMockData())
-           if(subSetPositions != null) {
-               for(item in subSetPositions) {
-                   recyclerView.findViewHolderForAdapterPosition(
-                           item
-                   ).itemView.performClick()
+           if(subSetPositions != null && subSetPositions.size > 0) {
+               for(position in subSetPositions) {
+                   selectTransactionAtPosition(recyclerView, position)
                }
            } else {
                Toast.makeText(
@@ -67,6 +67,15 @@ class FindMatchActivity : AppCompatActivity() {
         }
     }
 
+    private fun selectTransactionAtPosition(recyclerView : RecyclerView, position : Int) {
+        try {
+            recyclerView.findViewHolderForAdapterPosition(
+                    position
+            ).itemView.performClick()
+        } catch (e : NullPointerException) {
+            Log.w("XeroBank", "recyclerView position not found " + e);
+        }
+    }
 
     private fun render(uiModel: MatchItemUIModel) {
         when (uiModel) {

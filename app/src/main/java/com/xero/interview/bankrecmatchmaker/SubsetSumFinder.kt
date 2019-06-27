@@ -8,7 +8,7 @@ class SubsetSumFinder: Calculations {
         lateinit var dp: Array<BooleanArray>
     }
 
-    override fun getAllSubsets(
+    override fun getSubset(
             transactionArray : List<Int>,
             arrayLength : Int,
             transactionSumToFind : Int
