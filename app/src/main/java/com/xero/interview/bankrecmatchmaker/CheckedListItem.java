@@ -35,12 +35,6 @@ public class CheckedListItem extends LinearLayout implements Checkable {
         setOrientation(HORIZONTAL);
         checkBox = (AppCompatCheckBox) layoutInflater.inflate(R.layout.list_item_checkbox, this, false);
         addView(checkBox, 0);
-        setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                checkBox.toggle();
-            }
-        });
     }
 
     @Override

@@ -7,8 +7,12 @@ public class MatchItem {
     private final float total;
     private final String docType;
 
-
-    public MatchItem(String paidTo, String transactionDate, float total, String docType) {
+    public MatchItem(
+        String paidTo,
+        String transactionDate,
+        float total,
+        String docType
+    ) {
         this.paidTo = paidTo;
         this.transactionDate = transactionDate;
         this.total = total;
