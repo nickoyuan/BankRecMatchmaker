@@ -43,7 +43,11 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        CheckedListItem listItem = (CheckedListItem) layoutInflater.inflate(R.layout.list_item_match, parent, false);
+        CheckedListItem listItem = (CheckedListItem) layoutInflater.inflate(
+            R.layout.list_item_match,
+            parent,
+            false
+        );
         return new ViewHolder(listItem);
     }
 
@@ -52,6 +56,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
         MatchItem matchItem = matchItems.get(position);
         holder.bind(matchItem);
     }
+
 
     @Override
     public int getItemCount() {

@@ -17,6 +17,17 @@
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <TextView
+        android:id="@+id/transactionAmount"
+        android:background="?attr/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:gravity="center"
+        android:singleLine="true"
+        android:textColor="@color/text_title_subtext"
+        android:textSize="@dimen/text_size_subtext"
+        android:elevation="@dimen/toolbar_elevation"/>
+
+    <TextView
         android:id="@+id/match_text"
         android:background="?attr/colorPrimary"
         android:layout_width="match_parent"

@@ -21,6 +21,7 @@ public class FindMatchActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         TextView matchText = findViewById(R.id.match_text);
+        TextView transactionTotalText = findViewById(R.id.transactionAmount);
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
 
         setSupportActionBar(toolbar);
@@ -30,6 +31,9 @@ public class FindMatchActivity extends AppCompatActivity {
 
         float target = getIntent().getFloatExtra(TARGET_MATCH_VALUE, 10000f);
         matchText.setText(getString(R.string.select_matches, (int) target));
+
+        float transactionAmount = getIntent().getFloatExtra(TARGET_MATCH_VALUE, 1000.50f);
+        transactionTotalText.setText(getString(R.string.total_amount, (float) transactionAmount));
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
