@@ -38,6 +38,7 @@ class FindMatchActivity : AppCompatActivity() {
         })
         viewModel.repository = Repository(this)
         viewModel.initialize()
+        viewModel.reset()
 
         matchText.text = viewModel.repository.getMatchCount().toString()
         transactionTotalText.text = viewModel.repository.getTransactionTotal().toString()
